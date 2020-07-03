@@ -1,0 +1,19 @@
+{
+    "manifest_version": 2,
+    "name": "Covid Extension",
+    "version": "1.0.0",
+    "description": "Prevents Covid Misinformation by correcting false statistics",
+    "short_name": "Covid19",
+    "permissions": ["activeTab", "declarativeContent", "storage", "<all_urls>"],
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "css": ["background.css"],
+            "js": ["background.js"]
+        }
+    ],
+    "browser_action": {
+        "default_title": "Covid Extension",
+        "default_popup": "popup.html"
+    }
+}
