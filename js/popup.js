@@ -1,74 +1,47 @@
-// const btn = document.querySelector(".btn")
+const btn = document.querySelector(".btn")
+const btnClose = document.querySelector(".btnClose");
+const result = document.querySelector(".results")
 
-// const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-// const recognition = new SpeechRecognition()
-// recognition.continuous = true
+navigator.webkitGetUserMedia({audio: true,}, function(stream) {stream.stop();}, function() {});
 
-// btn.addEventListener("click", function(){
 
-//     if(btn.id == "off"){
-//         btn.id = "on"
-//         recognition.start();
-//     }
+import Artyom from "artyom.js"
+const artyom = new Artyom()
 
-//     else{
-//         btn.id = "off"
-//         recognition.stop();
-//     }
-    
-// })
+if(!artyom.speechSupported()) alert('Speech not supported')
+if(!artyom.recognizingSupported()) alert('Recognition not supported')
 
-recognition.onresult = event => {
-    let finalStr = event.results[0][0].transcript
-    console.log(finalStr)
-}
-window.addEventListener("DOMContentLoaded", () => {
-    const button = document.getElementById("button");
-    const result = document.getElementById("result");
-    const main = document.getElementsByTagName("main")[0];
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
-    if (typeof SpeechRecognition === "undefined") {
-      button.remove();
-      const message = document.getElementById("message");
-      message.removeAttribute("hidden");
-      message.setAttribute("aria-hidden", "false");
-    } else {
-        let listening = false;
-        const recognition = new SpeechRecognition();
-        const start = () => {};
-        const stop = () => {};
-        const onResult = event => {};    }
-  });
-  const start = () => {
-    recognition.start();
-    button.textContent = "Stop listening";
-    main.classList.add("speaking");
-  };
-  const stop = () => {
-    recognition.stop();
-    button.textContent = "Start listening";
-    main.classList.remove("speaking");
-  };
-  const onResult = event => {
-    result.innerHTML = "";
-    for (const res of event.results) {
-      const text = document.createTextNode(res[0].transcript);
-      const p = document.createElement("p");
-      if (res.isFinal) {
-        p.classList.add("final");
-      }
-      p.appendChild(text);
-      result.appendChild(p);
-    }
+var UserDictation = artyom.newDictation({
+  continuous:true, // Enable continuous if HTTPS connection
+  onResult:function(text){
+      // Do something with the text
+      console.log(text);
+  },
+  onStart:function(){
+      console.log("Dictation started by the user");
+  },
+  onEnd:function(){
+      alert("Dictation stopped by the user");
   }
-  recognition.continuous = true;
-  recognition.interimResults = true;
-  recognition.addEventListener("result", onResult);
-  console.log("test")
+});
 
-  button.addEventListener("click", () => {
-    listening ? stop() : start();
-    listening = !listening;
-  });
+UserDictation.start();
+
+btn.addEventListener("click", function(){
+  btn.classList.toggle("active");
+  if(btn.value == 'off'){
+      btn.value = 'on'
+  }
+  else if(btn.value == 'on'){
+      btn.value = 'off'
+  }
+
+  btn.value == "on" ? start() : stop()
+  console.log(btn.value)
+
+})
 
 
+btnClose.addEventListener("click", () => {
+  window.close()
+})
